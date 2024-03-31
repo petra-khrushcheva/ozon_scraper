@@ -1,0 +1,1 @@
+from src.example_fastapi_module.models import Item  # noqa
