@@ -1,46 +1,17 @@
-from uuid import UUID
+from typing_extensions import Annotated
 
-from pydantic import BaseModel, ConfigDict
-
-from src.tasks.schemas import TaskRead, TaskWithExecutor
-from src.users.schemas import UserRead
-from src.workspaces.models import GroupRole
+from pydantic import BaseModel, ConfigDict, Field
 
 
-class WorkspaceBase(BaseModel):
-    name: str
-    description: str | None = None
+class ProductsCount(BaseModel):
+    products_count: Annotated[int, Field(10, strict=True, gt=0, le=50)]
 
 
-class WorkspaceCreate(WorkspaceBase):
-    pass
-
-
-class WorkspaceUpdate(WorkspaceBase):
-    name: str | None = None
-
-
-class WorkspaceRead(WorkspaceBase):
+class Product(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    id: UUID
-
-
-class WorkspaceWithTasks(WorkspaceRead):
-    tasks: list[TaskWithExecutor]
-
-
-class MembershipUpdate(BaseModel):
-    user_role: GroupRole = GroupRole.user.value
-
-
-class MembershipCreate(MembershipUpdate):
-    user_id: UUID
-
-
-class WorkspaceUser(UserRead):
-    user_role: list[GroupRole]
-
-
-class UserWithTasks(WorkspaceUser):
-    appointed_tasks: list[TaskRead] | None = None
+    name: str
+    price: float
+    description: str
+    image_url: str
+    discount: str | None = None
