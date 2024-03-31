@@ -17,7 +17,7 @@ from src.workspaces.schemas import (MembershipCreate, MembershipUpdate,
 from src.workspaces.services import WorkspaceCRUD, WSMembershipCRUD
 
 """Router for workspace CRUD"""
-ws_router = APIRouter(prefix="/workspaces", tags=["Workspaces"])
+router = APIRouter(prefix="/workspaces", tags=["Workspaces"])
 
 """Router for working with associations of users and workspaces"""
 membership_router = APIRouter(

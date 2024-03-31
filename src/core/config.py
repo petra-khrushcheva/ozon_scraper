@@ -12,11 +12,10 @@ class Settings(BaseSettings):
     db_username: str
     db_echo: bool
 
-    secret_key: SecretStr
+    bot_token: SecretStr
 
     project_name: str
     project_version: str
-    jwt_lifetime_seconds: int
 
     model_config = SettingsConfigDict(
         env_file=f"{pathlib.Path(__file__).parents[2]}/.env",

@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from src.core.basemodels import Base
 from src.core.config import settings
-from src.example_fastapi_module.models import Item  # noqa
+from src.products.models import Item  # noqa
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

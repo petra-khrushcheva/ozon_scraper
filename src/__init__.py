@@ -1,1 +1,1 @@
-from src.example_fastapi_module import Item  # noqa
+from src.products import Item  # noqa
