@@ -1,1 +1,1 @@
-from src.products import Item  # noqa
+from src.products import Product  # noqa
