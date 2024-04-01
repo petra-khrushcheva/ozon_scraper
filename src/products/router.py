@@ -4,12 +4,12 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.core.database import get_session
+from src.core import get_session
+from src.products import services
 
 # from src.products.dependencies import ...
 from src.products.schemas import Product, ProductsCount
-from src.products import services
-
+from src import scraper
 
 router = APIRouter(prefix="/products", tags=["Products"])
 
@@ -24,7 +24,7 @@ async def start_scraping(
     должно приниматься в теле запроса в параметре products_count, по умолчанию
     10 (если значение не было передано), максимум 50.
     """
-    return await services.start_scraping()
+    return await scraper.start_scraping()
 
 
 @router.get("/", response_model=List[Product])

@@ -1,10 +1,10 @@
 import enum
 from uuid import UUID
 
-from sqlalchemy import ForeignKey, String, Text, UniqueConstraint
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import ForeignKey, String, Text
+from sqlalchemy.orm import Mapped, mapped_column
 
-from src.core.basemodels import Base
+from src.core import Base
 
 
 class Product(Base):
@@ -13,6 +13,8 @@ class Product(Base):
     name: Mapped[str] = mapped_column(String(50))
     description: Mapped[str | None] = mapped_column(Text)
 
+#где то здесь должна быть запись даты или номера парсинга
+
 
 # class Workspace(Base):
 #     __tablename__ = "workspaces"
@@ -20,9 +22,6 @@ class Product(Base):
 #     name: Mapped[str] = mapped_column(String(50))
 #     description: Mapped[str | None] = mapped_column(Text)
 
-#     users: Mapped[list["WorkspaceUserAssociation"]] = relationship(
-#         back_populates="workspace", cascade="all, delete"
-#     )
 #     tasks: Mapped[list["Task"]] = relationship(  # noqa: F821
 #         back_populates="workspace",
 #         primaryjoin=(

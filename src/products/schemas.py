@@ -1,6 +1,5 @@
-from typing_extensions import Annotated
-
 from pydantic import BaseModel, ConfigDict, Field
+from typing_extensions import Annotated
 
 
 class ProductsCount(BaseModel):
