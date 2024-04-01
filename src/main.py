@@ -5,7 +5,7 @@ from fastapi import FastAPI
 
 from src.bot import bot, dp
 from src.core import settings
-from src.router.api_v1 import router
+from src.router import router
 
 
 @asynccontextmanager
