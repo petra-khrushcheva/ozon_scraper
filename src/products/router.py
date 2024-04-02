@@ -6,7 +6,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src import scraper
 from src.core import get_session
 from src.products import dependencies
-
 from src.products.schemas import Product, ProductsCount
 
 router = APIRouter(prefix="/products", tags=["Products"])

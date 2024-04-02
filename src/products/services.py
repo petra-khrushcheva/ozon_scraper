@@ -1,15 +1,12 @@
 from uuid import UUID
 
 from sqlalchemy import desc, select
-from sqlalchemy.orm import joinedload
 from sqlalchemy.engine import Result
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import joinedload
 
-from src.products.models import (
-    Product,
-    ProductScrapingAssociation,
-    ScrapingEvent,
-)
+from src.products.models import (Product, ProductScrapingAssociation,
+                                 ScrapingEvent)
 
 
 async def get_last_scraping_products(session: AsyncSession):
@@ -24,6 +21,7 @@ async def get_last_scraping_products(session: AsyncSession):
                 Product.name,
                 Product.description,
                 Product.image_url,
+                Product.slug
             )
             .where(ProductScrapingAssociation.scraping_id == last_scraping.id)
             .options(joinedload(ProductScrapingAssociation.product))

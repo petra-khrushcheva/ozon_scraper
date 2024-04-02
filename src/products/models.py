@@ -11,6 +11,7 @@ class Product(Base):
     name: Mapped[str] = mapped_column(String(50))
     description: Mapped[str | None] = mapped_column(Text)
     image_url: Mapped[str]
+    slug: Mapped[str]
 
 
 class ScrapingEvent(Base):
