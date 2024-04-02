@@ -13,24 +13,23 @@ from src.products.models import (
 
 
 async def get_last_scraping_products(session: AsyncSession):
-    last_scraping = await session.execute(
+    last_scraping = (await session.execute(
         select(ScrapingEvent).order_by(desc(ScrapingEvent.id)).limit(1)
-    )
-    # scalar_one_or_none()
-    # if last_scraping is not none
-    stmt = (
-        select(
-            ProductScrapingAssociation.discount,
-            ProductScrapingAssociation.price,
-            Product.name,
-            Product.description,
-            Product.image_url,
+    )).scalar_one_or_none()
+    if last_scraping is not None:
+        stmt = (
+            select(
+                ProductScrapingAssociation.discount,
+                ProductScrapingAssociation.price,
+                Product.name,
+                Product.description,
+                Product.image_url,
+            )
+            .where(ProductScrapingAssociation.scraping_id == last_scraping.id)
+            .options(joinedload(ProductScrapingAssociation.product))
         )
-        .where(ProductScrapingAssociation.scraping_id == last_scraping.id)
-        .options(joinedload(ProductScrapingAssociation.product))
-    )
-    result: Result = await session.execute(stmt)
-    return result.unique().scalars().all()
+        result: Result = await session.execute(stmt)
+        return result.unique().scalars().all()
 
 
 async def get_product(product_id: UUID, session: AsyncSession):
