@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src import scraper
 from src.core import get_session
-from src.products import services
+from src.products import dependencies
 
 from src.products.schemas import Product, ProductsCount
 
@@ -32,7 +32,7 @@ async def get_products(session: AsyncSession = Depends(get_session)):
     """
     Получение списка товаров последнего парсинга.
     """
-    return await services.get_last_scraping_products(session=session)
+    return await dependencies.get_last_scraping_products(session=session)
 
 
 @router.get("/{product_id}", response_model=Product)
@@ -42,4 +42,6 @@ async def get_product(
     """
     Получение товара по айди.
     """
-    return await services.get_product(product_id=product_id, session=session)
+    return await dependencies.get_product_by_id(
+        product_id=product_id, session=session
+    )
