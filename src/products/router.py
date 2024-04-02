@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src import scraper
 from src.core import get_session
 from src.products import services
-# from src.products.dependencies import ...
+
 from src.products.schemas import Product, ProductsCount
 
 router = APIRouter(prefix="/products", tags=["Products"])
@@ -22,7 +22,9 @@ async def start_scraping(
     принимается в теле запроса в параметре products_count, по умолчанию
     10 (если значение не было передано), максимум 50.
     """
-    return await scraper.start_scraping(products_count=input)
+    return await scraper.start_scraping(
+        products_count=input.products_count, session=session
+    )
 
 
 @router.get("/", response_model=List[Product])
@@ -40,4 +42,4 @@ async def get_product(
     """
     Получение товара по айди.
     """
-    return await services.get_product(session=session)
+    return await services.get_product(product_id=product_id, session=session)
