@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     db_echo: bool
 
     bot_token: SecretStr
+    chat_id: str
 
     project_name: str
     project_version: str
