@@ -7,7 +7,7 @@ from src.core import Base
 class Product(Base):
     __tablename__ = "products"
 
-    id: Mapped[int]
+    id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(50))
     description: Mapped[str | None] = mapped_column(Text)
     image_url: Mapped[str]

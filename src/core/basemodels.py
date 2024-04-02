@@ -13,14 +13,6 @@ class Base(DeclarativeBase):
         default=uuid.uuid4,
         server_default=text("gen_random_uuid()"),
     )
-    is_active: Mapped[bool] = mapped_column(
-        default=True, server_default="TRUE"
-    )
     created_at: Mapped[datetime.datetime] = mapped_column(
         DateTime(timezone=True), server_default=text("TIMEZONE('utc', now())")
-    )
-    updated_at: Mapped[datetime.datetime] = mapped_column(
-        DateTime(timezone=True),
-        server_default=text("TIMEZONE('utc', now())"),
-        onupdate=datetime.datetime.now(datetime.UTC),
     )
