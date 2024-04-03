@@ -5,7 +5,7 @@ from src.core import settings
 
 async def send_alert(products_count: int):
     """
-    Оповещение в телеграмм о завершении парсинга,
+    Оповещение в телеграм о завершении парсинга,
     запущеного через POST v1/products/.
     """
     bot = Bot(token=settings.bot_token.get_secret_value())
