@@ -6,11 +6,15 @@ class ProductsCount(BaseModel):
     products_count: Annotated[int, Field(10, strict=True, gt=0, le=50)]
 
 
-class Product(BaseModel):
+class ProductRead(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     name: str
-    price: float
-    description: str
+    price: int
     image_url: str
     discount: str | None = None
+
+
+class ProductCreate(ProductRead):
+    id: int
+    slug: str

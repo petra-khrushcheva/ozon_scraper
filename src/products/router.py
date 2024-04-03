@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src import scraper
 from src.core import get_session
 from src.products import dependencies
-from src.products.schemas import Product, ProductsCount
+from src.products.schemas import ProductRead, ProductsCount
 
 router = APIRouter(prefix="/products", tags=["Products"])
 
@@ -21,12 +21,13 @@ async def start_scraping(
     принимается в теле запроса в параметре products_count, по умолчанию
     10 (если значение не было передано), максимум 50.
     """
-    return await scraper.start_scraping(
+    await scraper.start_scraping(
         products_count=input.products_count, session=session
     )
+    return {"message": "Пожалуйста, подождите. Идет сбор данных."}
 
 
-@router.get("/", response_model=List[Product])
+@router.get("/", response_model=List[ProductRead])
 async def get_products(session: AsyncSession = Depends(get_session)):
     """
     Получение списка товаров последнего парсинга.
@@ -34,7 +35,7 @@ async def get_products(session: AsyncSession = Depends(get_session)):
     return await dependencies.get_last_scraping_products(session=session)
 
 
-@router.get("/{product_id}", response_model=Product)
+@router.get("/{product_id}", response_model=ProductRead)
 async def get_product(
     product_id: int, session: AsyncSession = Depends(get_session)
 ):

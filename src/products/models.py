@@ -8,10 +8,9 @@ class Product(Base):
     __tablename__ = "products"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(50))
-    description: Mapped[str | None] = mapped_column(Text)
+    name: Mapped[str] = mapped_column(String(200))
     image_url: Mapped[str]
-    slug: Mapped[str]
+    slug: Mapped[str] = mapped_column(String(200))
 
 
 class ScrapingEvent(Base):
@@ -41,3 +40,4 @@ class ProductScrapingAssociation(Base):
     discount: Mapped[str | None]
 
     product: Mapped["Product"] = relationship()
+    scraping: Mapped["ScrapingEvent"] = relationship()

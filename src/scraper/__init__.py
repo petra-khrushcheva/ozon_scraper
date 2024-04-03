@@ -1,2 +1,1 @@
-async def start_scraping(count: int):
-    pass
+from src.scraper.services import start_scraping  # noqa
