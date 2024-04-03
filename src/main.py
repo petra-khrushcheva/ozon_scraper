@@ -10,7 +10,7 @@ from src.router import router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    asyncio.create_task(dp.start_polling(bot))
+    asyncio.create_task(dp.start_polling(bot, handle_signals=False))
     yield
 
 
