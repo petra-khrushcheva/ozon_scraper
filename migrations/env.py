@@ -7,7 +7,8 @@ from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from src.core import Base, settings
-from src.products import Product, ProductScrapingAssociation, ScrapingEvent  # noqa
+from src.products import (Product, ProductScrapingAssociation,  # noqa
+                          ScrapingEvent)
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
