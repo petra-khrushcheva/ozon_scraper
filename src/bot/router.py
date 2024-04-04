@@ -16,7 +16,8 @@ async def command_start_handler(message: Message):
         text=(
             "Этот бот присылает вам уведомления о завершении парсинга товаров "
             "с сайта Ozon. Вы можете посмотреть результаты последнего парсинга"
-            " по команде /products_list")
+            " по команде /products_list"
+        )
     )
 
 
@@ -36,7 +37,7 @@ async def product_list_handler(message: Message):
     for product in products:
         product_link = hlink(
             title=product.name,
-            url=f'https://www.ozon.ru/product/{product.slug}'
+            url=f"https://www.ozon.ru/product/{product.slug}",
         )
         line = f"{hbold(number)}. {product_link}\n"
         text += line
