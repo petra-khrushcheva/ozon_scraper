@@ -1,4 +1,4 @@
-![Workflow badge](https://github.com/petra-khrushcheva/<repository name>/actions/workflows/main.yml/badge.svg)
+<!-- ![Workflow badge](https://github.com/petra-khrushcheva/<repository name>/actions/workflows/main.yml/badge.svg)
 
 # Taskee - таск трекер для групповой работы
 
@@ -41,4 +41,6 @@ PGADMIN_PASSWORD=
 - Запустите Docker-compose:
 ```
 docker compose -f docker-compose-dev.yml up
-``` 
+```  -->
+
+bash -c "alembic upgrade head && uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload"
