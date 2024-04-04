@@ -19,7 +19,7 @@ def get_page_data(url) -> str:
     time.sleep(6)
     html = driver.page_source
     driver.quit()
-    return html
+    return html  # noqa R504
 
 
 def parse_page_data(products_count: int) -> list[schemas.ProductCreate]:

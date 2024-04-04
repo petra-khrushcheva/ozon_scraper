@@ -30,6 +30,7 @@ async def get_last_scraping_products(session: AsyncSession):
         )
         result: Result = await session.execute(stmt)
         return result.unique().all()
+    return
 
 
 async def get_product(product_id: UUID, session: AsyncSession):
