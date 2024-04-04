@@ -5,37 +5,40 @@ import undetected_chromedriver as uc
 from bs4 import BeautifulSoup
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.bot.alert_message import send_alert
-from src.products import (
-    Product,
-    ProductScrapingAssociation,
-    ScrapingEvent,
-    schemas,
-)
+from src.products import (Product, ProductScrapingAssociation, ScrapingEvent,
+                          schemas)
+from src.scraper.bot_alert_message import send_alert
 
 URL = "https://www.ozon.ru/seller/1/products/"
 
 
 def get_page_data(url) -> str:
-    with uc.Chrome() as driver:
-        driver.get(url)
-        time.sleep(6)
-        return driver.page_source
+    """Получение html кода заданной страницы."""
+    driver = uc.Chrome()
+    driver.get(url)
+    time.sleep(6)
+    html = driver.page_source
+    driver.quit()
+    return html
 
 
 def parse_page_data(products_count: int) -> list[schemas.ProductCreate]:
+    """
+    Получение заданного количества товаров
+    в виде списка объектов Pydantic модели.
+    """
     products = []
     page_number = 1
     html = get_page_data(url=f"{URL}?page={page_number}")
     soup = BeautifulSoup(html, "lxml")
-    product_cards = soup.find_all("div", class_="wi3")
+    product_cards = soup.find_all("div", class_=re.compile("tile-root"))
     while len(products) < products_count:
         for product in product_cards:
             if len(products) < products_count:
                 products.append(
                     schemas.ProductCreate(
                         id=product.find(
-                            "a", class_=re.compile("^xi3 tile-hover-target")
+                            "a", class_=re.compile("tile-hover-target")
                         )
                         .get("href")
                         .split("/")[2]
@@ -51,25 +54,21 @@ def parse_page_data(products_count: int) -> list[schemas.ProductCreate]:
                             (
                                 product.find(
                                     "span",
-                                    class_=(
-                                        "c300-a1 tsHeadline500Medium c300-c0"
-                                    ),
+                                    class_=re.compile("tsHeadline500Medium"),
                                 ).get_text()[:-2]
                             ).split()
                         ),
-                        image_url=product.find("img", class_="ix1 b900-a").get(
-                            "src"
-                        ),
+                        image_url=product.find(
+                            "img", class_=re.compile("b900-a")
+                        ).get("src"),
                         discount=product.find(
                             "span",
-                            class_=(
-                                "tsBodyControl400Small c300-a2 c300-a7 c300-b1"
-                            ),
+                            class_=re.compile("tsBodyControl400Small"),
                         )
                         .get_text()
                         .strip()[1:-1],
                         slug=product.find(
-                            "a", class_=re.compile("^xi3 tile-hover-target")
+                            "a", class_=re.compile("tile-hover-target")
                         )
                         .get("href")
                         .split("/")[2],
@@ -84,6 +83,7 @@ async def save_products_to_db(
     products_count: int,
     session: AsyncSession,
 ):
+    """Сохранение товаров, полученных при парсинге, в базу данных."""
     new_scraping = ScrapingEvent(products_count=products_count)
     session.add(new_scraping)
     for product_card in products:
@@ -107,6 +107,11 @@ async def save_products_to_db(
 
 
 async def start_scraping(session: AsyncSession, products_count: int = 10):
+    """
+    Общая функция парсинга. Объединяет в себе получение заданного количества
+    товаров, сохранение их в базу данных и отправку телеграм уведомления
+    о завершении парсинга. Вызывается через POST v1/products/.
+    """
     products = parse_page_data(products_count=products_count)
     await save_products_to_db(
         products=products, products_count=products_count, session=session
