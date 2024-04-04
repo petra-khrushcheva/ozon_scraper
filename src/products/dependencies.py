@@ -4,6 +4,7 @@ from src.products import services
 
 
 async def get_product_by_id(product_id, session):
+    """Получение товара по айди"""
     product = await services.get_product(
         product_id=product_id, session=session
     )
@@ -11,15 +12,16 @@ async def get_product_by_id(product_id, session):
         return product
     raise HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,
-        detail=f"There is no product with id {product_id}",
+        detail=f"Продукта с id {product_id} в базе нет.",
     )
 
 
 async def get_last_scraping_products(session):
+    """Получение списка товаров последнего парсинга"""
     products = await services.get_last_scraping_products(session=session)
-    if products is not None:
-        return products
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail="There was no scraping yet",
-    )
+    if not products:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Парсинга еще не было",
+        )
+    return products
