@@ -12,7 +12,9 @@ async def get_last_scraping_products(session: AsyncSession):
     """Получение списка товаров последнего парсинга"""
     last_scraping = (
         await session.execute(
-            select(ScrapingEvent).order_by(desc(ScrapingEvent.id)).limit(1)
+            select(ScrapingEvent)
+            .order_by(desc(ScrapingEvent.created_at))
+            .limit(1)
         )
     ).scalar_one_or_none()
     if last_scraping is not None:
@@ -35,7 +37,6 @@ async def get_last_scraping_products(session: AsyncSession):
 
 async def get_product(product_id: UUID, session: AsyncSession):
     """Получение одного товара и его последней цены"""
-    result: Result = await session.get(Product, product_id)
     subq = (
         select(func.max(ProductScrapingAssociation.scraping_id))
         .where(ProductScrapingAssociation.product_id == product_id)

@@ -1,6 +1,6 @@
 from typing import List
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, BackgroundTasks, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src import scraper
@@ -11,9 +11,10 @@ from src.products.schemas import ProductRead, ProductsCount
 router = APIRouter(prefix="/products", tags=["Products"])
 
 
-@router.post("/", status_code=status.HTTP_200_OK)
+@router.post("/", status_code=status.HTTP_202_ACCEPTED)
 async def start_scraping(
     input: ProductsCount,
+    background_tasks: BackgroundTasks,
     session: AsyncSession = Depends(get_session),
 ):
     """
@@ -21,9 +22,12 @@ async def start_scraping(
     принимается в теле запроса в параметре products_count, по умолчанию
     10 (если значение не было передано), максимум 50.
     """
-    await scraper.start_scraping(
-        products_count=input.products_count, session=session
+    background_tasks.add_task(
+        scraper.start_scraping(), session, input.products_count
     )
+    # await scraper.start_scraping(
+    #     products_count=input.products_count, session=session
+    # )
     return {"message": "Пожалуйста, подождите. Идет сбор данных."}
 
 

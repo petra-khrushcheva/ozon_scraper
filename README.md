@@ -1,46 +1,47 @@
-<!-- ![Workflow badge](https://github.com/petra-khrushcheva/<repository name>/actions/workflows/main.yml/badge.svg)
+![Workflow badge](https://github.com/petra-khrushcheva/ozon_scraper/actions/workflows/main.yml/badge.svg)
 
-# Taskee - таск трекер для групповой работы
+# Парсер маркетплейса
 
-Таск трекер для групповой работы с различным уровнем доступа для членов группы.  
-Доступны эндпойнты для работы с рабочими пространствами (workspaces) и задачами внутри рабочих пространств (tasks). Эндпойнты закрыты авторизацией.  
+Парсер товаров с сайта  $O_3$ с управлением через FastAPI приложение и получением результатов через телеграм бот. 
+Парсинг осуществляется с помощью Selenium и Beautiful Soup.
 Информация сохраняется в базу данных PostgresQL.
 ***
 ### Технологии
 Python 3.11  
 FastAPI 0.104  
-SQLAlchemy 2.0
+SQLAlchemy 2.0  
+Pydantic 2.5  
+Aiogram 3.4  
+Alembic 1.13  
+Selenium 4.19  
+BeautifulSoup 4.12  
+PostgreSQL  
 ***
 ### Установка
 - Клонируйте проект:
 ```
-git clone git@github.com:petra-khrushcheva/taskee_2_0.git
+git clone git@github.com:petra-khrushcheva/ozon_scraper.git
 ``` 
-- Перейдите в директорию taskee_2_0:
+- Перейдите в директорию ozon_scraper:
 ```
-cd taskee_2_0
+cd ozon_scraper
 ``` 
-- Cоздайте .env файл по образцу:
+- Создайте и активируйте виртуальное окружение:
 ```
-DB_HOSTNAME=
-DB_PORT=
-DB_USERNAME=
-DB_PASSWORD=
-DB_NAME=
-DB_ECHO=False
-SECRET_KEY=
-
-PROJECT_NAME='Taskee - таск трекер'
-PROJECT_VERSION="0.2.0"
-JWT_LIFETIME_SECONDS=2592000 #1 month
-
-PGADMIN_EMAIL=
-PGADMIN_PASSWORD=
-
+python3 -m venv venv
+source venv/bin/activate
 ``` 
-- Запустите Docker-compose:
+- Cоздайте переменные окружения по [образцу](https://github.com/petra-khrushcheva/ozon_scraper/blob/main/.env.example).
+- Установите зависимости:
 ```
-docker compose -f docker-compose-dev.yml up
-```  -->
-
-bash -c "alembic upgrade head && uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload"
+python3 -m pip install --upgrade pip
+pip install -r requirements.txt
+``` 
+- Выполните миграции:
+```
+alembic upgrade head
+``` 
+- Запустите проект:
+```
+uvicorn src.main:app
+``` 
